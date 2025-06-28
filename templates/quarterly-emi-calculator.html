@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quarterly EMI Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Quarterly EMI Calculator</h1>
+            <p>Calculate your quarterly loan payments with precision</p>
+        </header>
+
+        <main class="main-content">
+            <div class="calculator-grid">
+                <!-- Left Section: Calculation Inputs -->
+                <div class="calculation-section">
+                    <h2>Loan Details</h2>
+                    
+                    <!-- Loan Amount Section -->
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label class="input-label">Home Loan Amount</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="principal" value="50,00,000" class="input-field">
+                                <span class="input-symbol">₹</span>
+                            </div>
+                        </div>
+                        <div class="slider-wrapper">
+                            <input type="range" id="principalSlider" min="100000" max="20000000" value="5000000" step="100000" class="slider">
+                            <div class="slider-scale">
+                                <span class="scale-point">0</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">25L</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">50L</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">75L</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">100L</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">125L</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">150L</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">175L</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">200L</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interest Rate Section -->
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label class="input-label">Interest Rate</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="annual_rate" value="9" class="input-field">
+                                <span class="input-symbol">%</span>
+                            </div>
+                        </div>
+                        <div class="slider-wrapper">
+                            <input type="range" id="rateSlider" min="5" max="20" value="9" step="0.1" class="slider">
+                            <div class="slider-scale">
+                                <span class="scale-point">5</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">7.5</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">10</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">12.5</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">15</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">17.5</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loan Tenure Section -->
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label class="input-label">Loan Tenure</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="tenure_quarters" value="20" class="input-field">
+                                <div class="tenure-toggle">
+                                    <button type="button" id="toggleYr" class="toggle-btn">Yr</button>
+                                    <button type="button" id="toggleQtr" class="toggle-btn active">Qtr</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slider-wrapper">
+                            <input type="range" id="tenureSlider" min="1" max="120" value="20" step="1" class="slider">
+                            <div class="slider-scale">
+                                <span class="scale-point">0</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">20</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">40</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">60</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">80</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">100</span>
+                                <span class="scale-mark">|</span>
+                                <span class="scale-point">120</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Section: Results -->
+                <div class="results-section" id="resultsSection">
+                    <h2>Calculation Results</h2>
+                    
+                    <div class="result-grid">
+                        <div class="result-item highlight">
+                            <div class="result-label">Quarterly EMI</div>
+                            <div class="result-value" id="quarterlyEmi">₹0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Total Interest Payable</div>
+                            <div class="result-value" id="totalInterest">₹0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Total Payment<br>(Principal + Interest)</div>
+                            <div class="result-value" id="totalPayment">₹0</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-section">
+                        <div class="chart-placeholder">
+                            <canvas id="pieChart" width="200" height="200"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color principal"></div>
+                                <span>Principal (₹<span id="principalAmount">0</span>)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color interest"></div>
+                                <span>Interest (₹<span id="interestAmount">0</span>)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 
