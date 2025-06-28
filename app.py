@@ -94,5 +94,8 @@ def calculate():
     except Exception as e:
         return jsonify({'error': 'An unexpected error occurred'}), 500
 
+# For Vercel deployment
+app.debug = False
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000) 
